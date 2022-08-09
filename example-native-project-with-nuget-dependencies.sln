@@ -1,0 +1,49 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.32630.194
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "console-application", "console-application\console-application.vcxproj", "{AFA5538C-3DEE-4465-AC5F-F642A19057AB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{622DC389-959D-4CFC-B6B2-822BB1D63841}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+		LICENSE = LICENSE
+		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{7F6C59A7-AD0C-4874-94EE-0FA87379E43C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{E27A6D59-06F7-4145-8FFF-645DB9D74AF6}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\build.yaml = .github\workflows\build.yaml
+		.github\workflows\push-branch.yaml = .github\workflows\push-branch.yaml
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AFA5538C-3DEE-4465-AC5F-F642A19057AB}.Debug|x64.ActiveCfg = Debug|x64
+		{AFA5538C-3DEE-4465-AC5F-F642A19057AB}.Debug|x64.Build.0 = Debug|x64
+		{AFA5538C-3DEE-4465-AC5F-F642A19057AB}.Debug|x86.ActiveCfg = Debug|Win32
+		{AFA5538C-3DEE-4465-AC5F-F642A19057AB}.Debug|x86.Build.0 = Debug|Win32
+		{AFA5538C-3DEE-4465-AC5F-F642A19057AB}.Release|x64.ActiveCfg = Release|x64
+		{AFA5538C-3DEE-4465-AC5F-F642A19057AB}.Release|x64.Build.0 = Release|x64
+		{AFA5538C-3DEE-4465-AC5F-F642A19057AB}.Release|x86.ActiveCfg = Release|Win32
+		{AFA5538C-3DEE-4465-AC5F-F642A19057AB}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{E27A6D59-06F7-4145-8FFF-645DB9D74AF6} = {7F6C59A7-AD0C-4874-94EE-0FA87379E43C}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {45E92CF1-CDFB-48AF-BDB6-ACE5346AECED}
+	EndGlobalSection
+EndGlobal
