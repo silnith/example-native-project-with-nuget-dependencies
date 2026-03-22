@@ -27,7 +27,7 @@ jobs:
           name: packages
           path: packages/
   build:
-    name: Build
+    name: Build Intel
     runs-on: windows-2022
     needs:
       - setup
@@ -90,7 +90,7 @@ jobs:
           path: packages/
       - name: Build
         run: msbuild ${{ inputs.solution_file }} -p:Configuration=${{ matrix.configuration }} -p:Platform=${{ matrix.platform }}
-      - name: Run console application (everything else)
+      - name: Run console application
         continue-on-error: true
         run: ./${{ matrix.platform }}/${{ matrix.configuration }}/console-application.exe
       - name: Upload Artifacts
