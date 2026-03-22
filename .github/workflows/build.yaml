@@ -16,13 +16,13 @@ jobs:
     runs-on: windows-2022
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v6
       - name: Configure GitHub Packages
         run: nuget sources add -Name GitHub -UserName ${{ github.actor }} -Password ${{ secrets.GITHUB_TOKEN }} -Source https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json -NonInteractive
       - name: NuGet Restore
         run: nuget restore ${{ inputs.solution_file }} -NonInteractive
       - name: Upload Packages Artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v7
         with:
           name: packages
           path: packages/
@@ -41,23 +41,21 @@ jobs:
           - Release
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v6
       - name: Setup MSBuild
-        uses: microsoft/setup-msbuild@v1.1
-        with:
-          msbuild-architecture: x64
+        uses: microsoft/setup-msbuild@v3
       - name: Download Packages Artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v8
         with:
           name: packages
           path: packages/
       - name: Build
         run: msbuild ${{ inputs.solution_file }} -p:Configuration=${{ matrix.configuration }} -p:Platform=${{ matrix.platform }}
       - name: Upload Artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v7
         with:
-          name: ${{ matrix.configuration }}-${{ matrix.platform }}
+          name: build-${{ matrix.configuration }}-${{ matrix.platform }}
           path: |
-            x64/
             Debug/
             Release/
+            x64/
