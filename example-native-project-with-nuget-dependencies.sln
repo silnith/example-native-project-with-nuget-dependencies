@@ -22,16 +22,28 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|ARM = Debug|ARM
+		Debug|ARM64 = Debug|ARM64
 		Debug|x64 = Debug|x64
 		Debug|x86 = Debug|x86
+		Release|ARM = Release|ARM
+		Release|ARM64 = Release|ARM64
 		Release|x64 = Release|x64
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AFA5538C-3DEE-4465-AC5F-F642A19057AB}.Debug|ARM.ActiveCfg = Debug|ARM
+		{AFA5538C-3DEE-4465-AC5F-F642A19057AB}.Debug|ARM.Build.0 = Debug|ARM
+		{AFA5538C-3DEE-4465-AC5F-F642A19057AB}.Debug|ARM64.ActiveCfg = Debug|ARM64
+		{AFA5538C-3DEE-4465-AC5F-F642A19057AB}.Debug|ARM64.Build.0 = Debug|ARM64
 		{AFA5538C-3DEE-4465-AC5F-F642A19057AB}.Debug|x64.ActiveCfg = Debug|x64
 		{AFA5538C-3DEE-4465-AC5F-F642A19057AB}.Debug|x64.Build.0 = Debug|x64
 		{AFA5538C-3DEE-4465-AC5F-F642A19057AB}.Debug|x86.ActiveCfg = Debug|Win32
 		{AFA5538C-3DEE-4465-AC5F-F642A19057AB}.Debug|x86.Build.0 = Debug|Win32
+		{AFA5538C-3DEE-4465-AC5F-F642A19057AB}.Release|ARM.ActiveCfg = Release|ARM
+		{AFA5538C-3DEE-4465-AC5F-F642A19057AB}.Release|ARM.Build.0 = Release|ARM
+		{AFA5538C-3DEE-4465-AC5F-F642A19057AB}.Release|ARM64.ActiveCfg = Release|ARM64
+		{AFA5538C-3DEE-4465-AC5F-F642A19057AB}.Release|ARM64.Build.0 = Release|ARM64
 		{AFA5538C-3DEE-4465-AC5F-F642A19057AB}.Release|x64.ActiveCfg = Release|x64
 		{AFA5538C-3DEE-4465-AC5F-F642A19057AB}.Release|x64.Build.0 = Release|x64
 		{AFA5538C-3DEE-4465-AC5F-F642A19057AB}.Release|x86.ActiveCfg = Release|Win32
