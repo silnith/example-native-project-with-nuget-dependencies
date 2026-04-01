@@ -101,10 +101,9 @@ jobs:
           - Release
     steps:
       - name: Download Build Artifact
-        uses: actions/upload-artifact@v8
+        uses: actions/download-artifact@v8
         with:
           name: msbuild-build-${{ inputs.platform }}-${{ inputs.configuration }}
-          path: .
           if-no-files-found: error
       - name: Run console application (x86)
         if: ${{ matrix.platform == 'x86' }}
@@ -127,10 +126,9 @@ jobs:
           - Release
     steps:
       - name: Download Build Artifact
-        uses: actions/upload-artifact@v8
+        uses: actions/download-artifact@v8
         with:
           name: msbuild-build-${{ inputs.platform }}-${{ inputs.configuration }}
-          path: .
           if-no-files-found: error
       - name: Run console application
         continue-on-error: true
