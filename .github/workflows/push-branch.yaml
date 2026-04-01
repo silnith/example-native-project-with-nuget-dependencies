@@ -86,7 +86,6 @@ jobs:
     with:
       check-name: C++ Test Results
       artifact-pattern: msbuild-vstest-test-results-*
-      artifact-path: .
       test-result-files: "**/TestResults/**/*.trx"
     secrets: inherit
   run-console-app-intel:
