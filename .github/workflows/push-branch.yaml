@@ -103,7 +103,7 @@ jobs:
       - name: Download Build Artifact
         uses: actions/download-artifact@v8
         with:
-          name: msbuild-build-${{ inputs.platform }}-${{ inputs.configuration }}
+          name: msbuild-build-${{ matrix.platform }}-${{ matrix.configuration }}
           if-no-files-found: error
       - name: Run console application (x86)
         if: ${{ matrix.platform == 'x86' }}
@@ -128,7 +128,7 @@ jobs:
       - name: Download Build Artifact
         uses: actions/download-artifact@v8
         with:
-          name: msbuild-build-${{ inputs.platform }}-${{ inputs.configuration }}
+          name: msbuild-build-${{ matrix.platform }}-${{ matrix.configuration }}
           if-no-files-found: error
       - name: Run console application
         continue-on-error: true
