@@ -13,6 +13,9 @@ jobs:
     uses: silnith/github-workflows/.github/workflows/bash-get-date.yaml@main
   nuget-cache:
     name: NuGet Cache
+    permissions:
+      contents: read
+      packages: read
     needs:
       - get-date
     uses: silnith/github-workflows/.github/workflows/nuget-cache-dependencies.yaml@main
@@ -22,11 +25,11 @@ jobs:
       month: ${{ needs.get-date.outputs.month }}
       day: ${{ needs.get-date.outputs.day }}
     secrets: inherit
+  msbuild-intel:
+    name: MSBuild Intel
     permissions:
       contents: read
       packages: read
-  msbuild-intel:
-    name: MSBuild Intel
     needs:
       - get-date
       - nuget-cache
@@ -47,11 +50,11 @@ jobs:
       month: ${{ needs.get-date.outputs.month }}
       day: ${{ needs.get-date.outputs.day }}
     secrets: inherit
+  msbuild-arm:
+    name: MSBuild ARM
     permissions:
       contents: read
       packages: read
-  msbuild-arm:
-    name: MSBuild ARM
     needs:
       - get-date
       - nuget-cache
@@ -72,11 +75,10 @@ jobs:
       month: ${{ needs.get-date.outputs.month }}
       day: ${{ needs.get-date.outputs.day }}
     secrets: inherit
-    permissions:
-      contents: read
-      packages: read
   msbuild-test-results:
     name: Publish VSTest Results
+    permissions:
+      checks: write
     needs:
       - msbuild-intel
       - msbuild-arm
@@ -87,8 +89,6 @@ jobs:
       artifact-path: .
       test-result-files: "**/TestResults/**/*.trx"
     secrets: inherit
-    permissions:
-      checks: write
   run-console-app-intel:
     name: Run Console Application
     needs:
