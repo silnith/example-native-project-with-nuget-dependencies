@@ -8,9 +8,123 @@ on:
 env: {}
 
 jobs:
-  call-build:
-    name: Standard Build
-    uses: ./.github/workflows/build.yaml
+  get-date:
+    name: Date
+    uses: silnith/github-workflows/.github/workflows/bash-get-date.yaml@main
+  nuget-cache:
+    name: NuGet Cache
+    needs:
+      - get-date
+    uses: silnith/github-workflows/.github/workflows/nuget-cache-dependencies.yaml@main
     with:
-      solution_file: example-native-project-with-nuget-dependencies.sln
+      solution-file: example-native-project-with-nuget-dependencies.sln
+      year: ${{ needs.get-date.outputs.year }}
+      month: ${{ needs.get-date.outputs.month }}
+      day: ${{ needs.get-date.outputs.day }}
     secrets: inherit
+    permissions:
+      contents: read
+  msbuild-intel:
+    name: MSBuild Intel
+    needs:
+      - get-date
+      - nuget-cache
+    strategy:
+      matrix:
+        platform:
+          - x86
+          - x64
+        configuration:
+          - Debug
+          - Release
+    uses: silnith/github-workflows/.github/workflows/msbuild-intel.yaml@main
+    with:
+      solution-file: example-native-project-with-nuget-dependencies.sln
+      platform: ${{ matrix.platform }}
+      configuration: ${{ matrix.configuration }}
+      year: ${{ needs.get-date.outputs.year }}
+      month: ${{ needs.get-date.outputs.month }}
+      day: ${{ needs.get-date.outputs.day }}
+    secrets: inherit
+    permissions:
+      contents: read
+  msbuild-arm:
+    name: MSBuild ARM
+    needs:
+      - get-date
+      - nuget-cache
+    strategy:
+      matrix:
+        platform:
+          - ARM
+          - ARM64
+        configuration:
+          - Debug
+          - Release
+    uses: silnith/github-workflows/.github/workflows/msbuild-arm.yaml@main
+    with:
+      solution-file: example-native-project-with-nuget-dependencies.sln
+      platform: ${{ matrix.platform }}
+      configuration: ${{ matrix.configuration }}
+      year: ${{ needs.get-date.outputs.year }}
+      month: ${{ needs.get-date.outputs.month }}
+      day: ${{ needs.get-date.outputs.day }}
+    secrets: inherit
+    permissions:
+      contents: read
+  msbuild-test-results:
+    name: Publish VSTest Results
+    needs:
+      - msbuild-intel
+      - msbuild-arm
+    uses: silnith/github-workflows/.github/workflows/publish-test-results.yaml@main
+    with:
+      check-name: C++ Test Results
+      artifact-pattern: msbuild-vstest-test-results-*
+      artifact-path: .
+      test-result-files: "**/TestResults/**/*.trx"
+    secrets: inherit
+    permissions:
+      checks: write
+  run-console-app-intel:
+    name: Run Console Application
+    needs:
+      - msbuild-intel
+    strategy:
+      matrix:
+        platform:
+          - x86
+          - x64
+        configuration:
+          - Debug
+          - Release
+    steps:
+      - name: Download Artifact
+      - name: Run console application (x86)
+        if: ${{ matrix.platform == 'x86' }}
+        run: ./${{ matrix.configuration }}/console-application.exe
+      - name: Run console application (everything else)
+        if: ${{ matrix.platform != 'x86' }}
+        run: ./${{ matrix.platform }}/${{ matrix.configuration }}/console-application.exe
+  run-console-app-arm:
+    name: Run Console Application
+    needs:
+      - msbuild-arm
+    strategy:
+      matrix:
+        platform:
+          - ARM
+          - ARM64
+        configuration:
+          - Debug
+          - Release
+    steps:
+      - name: Download Build Artifact
+        uses: actions/upload-artifact@v8
+        with:
+          name: msbuild-build-${{ inputs.platform }}-${{ inputs.configuration }}
+          path: .
+          if-no-files-found: error
+      - name: Run console application
+        continue-on-error: true
+        run: ./${{ matrix.platform }}/${{ matrix.configuration }}/console-application.exe
