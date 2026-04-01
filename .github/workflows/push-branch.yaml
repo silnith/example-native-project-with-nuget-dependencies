@@ -5,12 +5,131 @@ on:
     branches:
       - '*'
 
-env: {}
-
 jobs:
-  call-build:
-    name: Standard Build
-    uses: ./.github/workflows/build.yaml
+  get-date:
+    name: Date
+    uses: silnith/github-workflows/.github/workflows/bash-get-date.yaml@main
+  nuget-cache:
+    name: NuGet Cache
+    permissions:
+      contents: read
+      packages: read
+    needs:
+      - get-date
+    uses: silnith/github-workflows/.github/workflows/nuget-cache-dependencies.yaml@main
     with:
-      solution_file: example-native-project-with-nuget-dependencies.sln
+      solution-file: example-native-project-with-nuget-dependencies.sln
+      year: ${{ needs.get-date.outputs.year }}
+      month: ${{ needs.get-date.outputs.month }}
+      day: ${{ needs.get-date.outputs.day }}
     secrets: inherit
+  msbuild-intel:
+    name: MSBuild Intel
+    permissions:
+      contents: read
+      packages: read
+    needs:
+      - get-date
+      - nuget-cache
+    strategy:
+      matrix:
+        platform:
+          - x86
+          - x64
+        configuration:
+          - Debug
+          - Release
+    uses: silnith/github-workflows/.github/workflows/msbuild-intel.yaml@main
+    with:
+      solution-file: example-native-project-with-nuget-dependencies.sln
+      platform: ${{ matrix.platform }}
+      configuration: ${{ matrix.configuration }}
+      year: ${{ needs.get-date.outputs.year }}
+      month: ${{ needs.get-date.outputs.month }}
+      day: ${{ needs.get-date.outputs.day }}
+    secrets: inherit
+  msbuild-arm:
+    name: MSBuild ARM
+    permissions:
+      contents: read
+      packages: read
+    needs:
+      - get-date
+      - nuget-cache
+    strategy:
+      matrix:
+        platform:
+          - ARM
+          - ARM64
+        configuration:
+          - Debug
+          - Release
+    uses: silnith/github-workflows/.github/workflows/msbuild-arm.yaml@main
+    with:
+      solution-file: example-native-project-with-nuget-dependencies.sln
+      platform: ${{ matrix.platform }}
+      configuration: ${{ matrix.configuration }}
+      year: ${{ needs.get-date.outputs.year }}
+      month: ${{ needs.get-date.outputs.month }}
+      day: ${{ needs.get-date.outputs.day }}
+    secrets: inherit
+  msbuild-test-results:
+    name: Publish VSTest Results
+    permissions:
+      checks: write
+    needs:
+      - msbuild-intel
+      - msbuild-arm
+    uses: silnith/github-workflows/.github/workflows/publish-test-results.yaml@main
+    with:
+      check-name: C++ Test Results
+      artifact-pattern: msbuild-vstest-test-results-*
+      test-result-files: "**/TestResults/**/*.trx"
+    secrets: inherit
+  run-console-app-intel:
+    name: Run Console Application
+    needs:
+      - msbuild-intel
+    runs-on: windows-2022
+    strategy:
+      matrix:
+        platform:
+          - x86
+          - x64
+        configuration:
+          - Debug
+          - Release
+    steps:
+      - name: Download Build Artifact
+        uses: actions/download-artifact@v8
+        with:
+          name: msbuild-build-${{ matrix.platform }}-${{ matrix.configuration }}
+          if-no-files-found: error
+      - name: Run console application (x86)
+        if: ${{ matrix.platform == 'x86' }}
+        run: ./${{ matrix.configuration }}/console-application.exe
+      - name: Run console application (everything else)
+        if: ${{ matrix.platform != 'x86' }}
+        run: ./${{ matrix.platform }}/${{ matrix.configuration }}/console-application.exe
+  run-console-app-arm:
+    name: Run Console Application
+    needs:
+      - msbuild-arm
+    runs-on: windows-11-arm
+    strategy:
+      matrix:
+        platform:
+          - ARM
+          - ARM64
+        configuration:
+          - Debug
+          - Release
+    steps:
+      - name: Download Build Artifact
+        uses: actions/download-artifact@v8
+        with:
+          name: msbuild-build-${{ matrix.platform }}-${{ matrix.configuration }}
+          if-no-files-found: error
+      - name: Run console application
+        continue-on-error: true
+        run: ./${{ matrix.platform }}/${{ matrix.configuration }}/console-application.exe
