@@ -90,6 +90,7 @@ jobs:
     name: Run Console Application
     needs:
       - msbuild-intel
+    runs-on: windows-2022
     strategy:
       matrix:
         platform:
@@ -110,6 +111,7 @@ jobs:
     name: Run Console Application
     needs:
       - msbuild-arm
+    runs-on: windows-11-arm
     strategy:
       matrix:
         platform:
