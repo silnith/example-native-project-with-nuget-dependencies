@@ -24,6 +24,7 @@ jobs:
     secrets: inherit
     permissions:
       contents: read
+      packages: read
   msbuild-intel:
     name: MSBuild Intel
     needs:
@@ -48,6 +49,7 @@ jobs:
     secrets: inherit
     permissions:
       contents: read
+      packages: read
   msbuild-arm:
     name: MSBuild ARM
     needs:
@@ -72,6 +74,7 @@ jobs:
     secrets: inherit
     permissions:
       contents: read
+      packages: read
   msbuild-test-results:
     name: Publish VSTest Results
     needs:
